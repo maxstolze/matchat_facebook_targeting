@@ -34,6 +34,17 @@ def initSession():
     FacebookAdsApi.set_default_api(api)
     return api
 
+def listAllCampaigns(account_id):
+    my_account = AdAccount(fbid=account_id)
+    my_account.remote_read(fields=[Campaign.Field.id, Campaign.Field.name])
+    return my_account.get_campaigns()
+
+def deleteAllCampaigns(account_id):
+    my_account = AdAccount(fbid=account_id)
+    my_account.remote_read()
+    for c in my_account.get_campaigns():
+        c.remote_delete()
+
 def readCampaign(campaign_id):
     campaign = Campaign(fbid=campaign_id)
     campaign.remote_read(fields=[Campaign.Field.id, Campaign.Field.name])
