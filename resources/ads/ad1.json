@@ -1,0 +1,20 @@
+{
+  "name" : "Matchat Ad",
+  "status" : "PAUSED",
+  "creative" : {
+    "title": "try out matchat!",
+    "body": "decentralized online marketplace",
+    "object_story_spec" : {
+      "link_data" : {
+        "message" : "Matchat Link message",
+        "link" : "https://matchat.org",
+        "caption" : "Matchat.org"
+      }
+    }
+  }
+}
+
+
+
+
+

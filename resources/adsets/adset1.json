@@ -1,0 +1,11 @@
+{
+  "name": "Matchat AdSet",
+  "is_autobid": true,
+  "daily_budget": 100,
+  "billing_event": "IMPRESSIONS",
+  "targeting" : {
+    "age_max" : 50,
+    "age_min" : 18,
+    "geo_locations" : { "countries": ["AT"] }
+  }
+}
