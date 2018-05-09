@@ -2,14 +2,14 @@
   "name" : "Matchat Ad",
   "status" : "PAUSED",
   "creative" : {
-    "title": "Share & Care Network Matchat.org",
+    "title": "Online-Marktplatz Matchat.org",
     "body": "this add is used to test the facebook marketing API",
     "object_story_spec" : {
       "link_data" : {
-        "message" : "Post things you offer or want and receive matches for it. Join the new Share & Care network on Matchat.org!",
+        "message" : "Kein langes Scrollen durch uninteressante Angebote. Sag was du bietest oder suchst, und du bekommst Matches!",
         "link" : "https://matchat.org",
-        "caption" : "https://matchat.org",
-        "name" : "Share & Care Network Matchat.org"
+        "caption" : "matchat.org",
+        "name" : "Post & Match 💗 Share & Care 💗 Matchat.org"
       }
     }
   }
