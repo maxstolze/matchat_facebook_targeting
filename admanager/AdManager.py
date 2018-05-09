@@ -4,6 +4,7 @@ from facebookads.adobjects.adaccount import AdAccount
 from facebookads.adobjects.adaccountuser import AdAccountUser
 from facebookads.adobjects.adstudy import AdStudy
 from facebookads.adobjects.campaign import Campaign
+from facebookads.adobjects.targetingsearch import TargetingSearch
 from facebookads.api import FacebookAdsApi
 from facebookads.adobjects.adset import AdSet
 from facebookads import FacebookAdsApi
@@ -77,6 +78,30 @@ class AdManager:
         campaign.remote_read(fields=[Campaign.Field.id, Campaign.Field.name])
         return campaign
 
+    def searchForTargetingInterests(self, interest_keywords):
+        interests = []
+
+        for interest in interest_keywords:
+            params = {
+                'q': interest,
+                'type': 'adinterest',
+            }
+            response = TargetingSearch.search(params)
+            for result in response:
+                if result['name'] == interest:
+                    interests.append(result)
+        return interests
+
+    def createInterestsFromTargetSearchResults(self, targetSearchResults):
+        interests = []
+        for result in targetSearchResults:
+            interest = {
+                'id': result['id'],
+                'name': result['name'],
+            }
+            interests.append(interest)
+        return interests
+
     def listAllAdsets(self):
         adsets = []
         campaigns = self.listAllCampaigns()
@@ -108,8 +133,9 @@ class AdManager:
                 adsets.append(adset)
         return adsets
 
-    def createAdSet(self, adset, campaign_id):
+    def createAdSet(self, adset, campaign_id, interests):
         adset[AdSet.Field.campaign_id] = campaign_id
+        adset['targeting']['interests'] = interests
         adset.remote_create()
 
     def listAllAds(self):

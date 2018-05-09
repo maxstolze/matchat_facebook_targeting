@@ -16,9 +16,14 @@ if __name__ == '__main__':
 
     admanager = AdManager('act_212526696146973', '212501799482796', resource_path)
 
-    my_account = AdAccount(fbid=my_account_id) # Ad Account 1
-    my_account.remote_read()
-    print "account id: " + my_account.get_id_assured()
+    admanager.deleteAllCampaigns()
+    campaigns = admanager.loadCampaignsFromResources()
+    admanager.createCampaign(campaigns[0])
+
+
+    # my_account = AdAccount(fbid=my_account_id) # Ad Account 1
+    # my_account.remote_read()
+    # print "account id: " + my_account.get_id_assured()
 
     # img_path = os.path.join(this_dir, 'resources', 'ads', 'images', 'matchat_graph_16_9.png')
     # print img_path
@@ -38,10 +43,29 @@ if __name__ == '__main__':
     #     admanager.createCampaign(c)
     #
     #
-    # adsets = admanager.readAdsetsFromResources()
+    adsets = admanager.loadAdsetsFromResources()
     # print "adsets: " + str(adsets)
     #
-    # admanager.createAdSet(adsets[0], c.get_id())
+
+    targetSearchResults = admanager.searchForTargetingInterests(["Sharing", "Sharing economy"])
+    print(targetSearchResults)
+    interests = admanager.createInterestsFromTargetSearchResults(targetSearchResults)
+    print(interests)
+    admanager.createAdSet(adsets[0], campaigns[0].get_id(), interests)
+
+
+    # resp2 = admanager.searchForTargetingInterest("Sharing economy")
+    # print("targeting response:" + str(resp2))
+    #
+    # interests = [{
+    #     'id': resp1['id'],
+    #     'name': resp1['name'],
+    # }, {
+    #     'id': resp2['id'],
+    #     'name': resp2['name'],
+    # }]
+    #
+    # admanager.createAdSet(adsets[0], '23842999336300500', interests)
 
     # campaign = createCampaign(my_account_id)
     # adset1 = createAdSet(my_account_id, campaign.get_id())
@@ -67,15 +91,15 @@ if __name__ == '__main__':
     # campaign = readCampaign('23842983211330500')
     # print "campaign: " + campaign[Campaign.Field.name]
 
-    ads = admanager.loadAdsFromResources()
-    print "read ads: " + str(ads)
-
-    # admanager.createAd(ads[0], adsets[0].get_id())
-
-    images = admanager.createAllImagesFromResources()
-    admanager.createAd(ads[0], adsets[0].get_id(), images[0].get_hash())
-
-    ads = admanager.listAllAds()
-    print "ads: " + str(ads)
+    # ads = admanager.loadAdsFromResources()
+    # print "read ads: " + str(ads)
+    #
+    # # admanager.createAd(ads[0], adsets[0].get_id())
+    #
+    # images = admanager.createAllImagesFromResources()
+    # admanager.createAd(ads[0], adsets[0].get_id(), images[0].get_hash())
+    #
+    # ads = admanager.listAllAds()
+    # print "ads: " + str(ads)
 
     #adstudy = admanager.createSplitTestAdStudy("SplitTest1", 1532512562, 1532512563, adsets)

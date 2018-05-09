@@ -1,11 +1,9 @@
 {
   "name": "Matchat AdSet",
   "is_autobid": true,
-  "daily_budget": 100,
+  "daily_budget": 500,
   "billing_event": "LINK_CLICKS",
   "targeting" : {
-    "age_max" : 50,
-    "age_min" : 18,
-    "geo_locations" : { "countries": ["AT"] }
+    "geo_locations" : { "countries": ["AT", "DE"] }
   }
 }
