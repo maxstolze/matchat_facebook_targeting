@@ -50,7 +50,7 @@ class AdManager:
         for c in my_account.get_campaigns():
             c.remote_delete()
 
-    def readCampaignFromJson(self, jsonFile):
+    def loadCampaignFromJson(self, jsonFile):
         campaign = Campaign(parent_id = self.account_id)
         config_file = open(jsonFile)
         config = json.load(config_file)
@@ -59,13 +59,13 @@ class AdManager:
             campaign[key] = config[key]
         return campaign
 
-    def readCampaignsFromResources(self):
+    def loadCampaignsFromResources(self):
         campaigns = []
         campaigns_dir = os.path.join(self.resource_path, "campaigns")
         for file in os.listdir(campaigns_dir):
             if file.endswith(".json"):
                 print os.path.join(campaigns_dir, file)
-                campaign = self.readCampaignFromJson(os.path.join(campaigns_dir, file))
+                campaign = self.loadCampaignFromJson(os.path.join(campaigns_dir, file))
                 campaigns.append(campaign)
         return campaigns
 
@@ -89,7 +89,7 @@ class AdManager:
         ad_set.remote_read(fields=[AdSet.Field.id])
         return ad_set
 
-    def readAdsetFromJson(self, jsonFile):
+    def loadAdsetFromJson(self, jsonFile):
         adset = AdSet(parent_id = self.account_id)
         config_file = open(jsonFile)
         config = json.load(config_file)
@@ -98,13 +98,13 @@ class AdManager:
             adset[key] = config[key]
         return adset
 
-    def readAdsetsFromResources(self):
+    def loadAdsetsFromResources(self):
         adsets = []
         adset_dir = os.path.join(self.resource_path, "adsets")
         for file in os.listdir(adset_dir):
             if file.endswith(".json"):
                 print os.path.join(adset_dir, file)
-                adset = self.readAdsetFromJson(os.path.join(adset_dir, file))
+                adset = self.loadAdsetFromJson(os.path.join(adset_dir, file))
                 adsets.append(adset)
         return adsets
 
@@ -119,7 +119,7 @@ class AdManager:
             ads.extend(c.get_ads([Ad.Field.id, Ad.Field.name]))
         return ads
 
-    def readAdFromJson(self, jsonFile):
+    def loadAdFromJson(self, jsonFile):
         ad = Ad(parent_id = self.account_id)
         config_file = open(jsonFile)
         config = json.load(config_file)
@@ -128,20 +128,37 @@ class AdManager:
             ad[key] = config[key]
         return ad
 
-    def readAdsFromResources(self):
+    def loadAdsFromResources(self):
         ads = []
         ads_dir = os.path.join(self.resource_path, "ads")
         for file in os.listdir(ads_dir):
             if file.endswith(".json"):
-                print os.path.join(ads_dir, file)
-                adset = self.readAdFromJson(os.path.join(ads_dir, file))
+                adset = self.loadAdFromJson(os.path.join(ads_dir, file))
                 ads.append(adset)
         return ads
 
-    def createAd(self, ad, adset_id):
+    def createAd(self, ad, adset_id, image_hash):
         ad[Ad.Field.adset_id] = adset_id
         ad['creative']['object_story_spec']['page_id'] = self.pageId
+        #ad['creative']['image_hash'] = image_hash
+        ad['creative']['object_story_spec']['link_data']['image_hash'] = image_hash
         ad.remote_create()
+
+    def createImageFromResources(self, image_path):
+        img = AdImage(parent_id=self.account_id)
+        img[AdImage.Field.filename] = image_path
+        img.remote_create()
+        return img
+
+    def createAllImagesFromResources(self):
+        images = []
+        img_dir = os.path.join(self.resource_path, "ads", "images")
+        for file in os.listdir(img_dir):
+            if file.endswith(".png"):
+                img_path = os.path.join(img_dir, file)
+                img = self.createImageFromResources(img_path)
+                images.append(img)
+        return images
 
     def createSplitTestAdStudy(self, name, start, end, adsets):
         adstudy = AdStudy(parent_id=self.business_id)
@@ -151,7 +168,8 @@ class AdManager:
         adstudy[AdStudy.Field.end_time] = end
         cells = []
         for adset in adsets:
-            cell = {'name' : 'Men', 'adsets' : [adset.get_id()], 'treatment_percentage' : 1 / len(adsets) * 100}
+            name = adset.get_name()  + "_" + str(adset.get_id())
+            cell = {'name' : name, 'adsets' : [adset.get_id()], 'treatment_percentage' : 1 / len(adsets) * 100}
             cells.append(cell)
         adstudy[AdStudy.Field.cells] = cells
         adstudy.remote_create()

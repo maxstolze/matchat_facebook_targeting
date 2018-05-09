@@ -2,18 +2,18 @@
   "name" : "Matchat Ad",
   "status" : "PAUSED",
   "creative" : {
-    "title": "try out matchat!",
-    "body": "decentralized online marketplace",
+    "title": "Share & Care Network Matchat.org",
+    "body": "this add is used to test the facebook marketing API",
     "object_story_spec" : {
       "link_data" : {
-        "message" : "Matchat Link message",
+        "message" : "Post things you offer or want and receive matches for it. Join the new Share & Care network on Matchat.org!",
         "link" : "https://matchat.org",
-        "caption" : "Matchat.org"
+        "caption" : "https://matchat.org",
+        "name" : "Share & Care Network Matchat.org"
       }
     }
   }
 }
-
 
 
 

@@ -20,6 +20,14 @@ if __name__ == '__main__':
     my_account.remote_read()
     print "account id: " + my_account.get_id_assured()
 
+    # img_path = os.path.join(this_dir, 'resources', 'ads', 'images', 'matchat_graph_16_9.png')
+    # print img_path
+    # hash = admanager.createImageFromResources(img_path)
+    # print hash
+
+    # images = admanager.createAllImagesFromResources()
+    # print images
+
     # campaigns = admanager.listAllCampaigns()
     # print "campaigns: " + str(campaigns)
 
@@ -59,10 +67,13 @@ if __name__ == '__main__':
     # campaign = readCampaign('23842983211330500')
     # print "campaign: " + campaign[Campaign.Field.name]
 
-    ads = admanager.readAdsFromResources()
+    ads = admanager.loadAdsFromResources()
     print "read ads: " + str(ads)
 
     # admanager.createAd(ads[0], adsets[0].get_id())
+
+    images = admanager.createAllImagesFromResources()
+    admanager.createAd(ads[0], adsets[0].get_id(), images[0].get_hash())
 
     ads = admanager.listAllAds()
     print "ads: " + str(ads)
