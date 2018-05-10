@@ -5,6 +5,7 @@
   "billing_event": "LINK_CLICKS",
   "targeting" : {
     "geo_locations" : { "countries": ["AT", "DE"] },
+    "targeting_optimization" : "expansion_all",
     "family_statuses" : [
       {"id": "6023005372383", "name": "New parents (0-12 months)"}, 
       {"id": "6023005458383", "name": "Parents with toddlers (01-02 years)"}, 

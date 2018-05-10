@@ -154,6 +154,8 @@ class AdManager:
         adset[AdSet.Field.campaign_id] = campaign_id
         adset.remote_create()
 
+    # NOTE: you can add the targeting option "targeting_optimization" : "expansion_all" to let facebook expand your
+    # audience and reach more users than specified by interests
     def getPotentialReachForTargeting(self, targeting_spec):
         my_account = AdAccount(fbid=self.account_id)
         params = {
