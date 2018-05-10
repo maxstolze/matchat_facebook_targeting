@@ -4,21 +4,59 @@ from admanager.AdManager import *
 
 if __name__ == '__main__':
 
-    # 472518946157433 = Heiko Friedrich Ad Account
-
-    my_account_id = 'act_212526696146973'
-    my_business_id = '212501799482796'
-
-
     this_dir = os.path.dirname(__file__)
     resource_path = os.path.join(this_dir, 'resources')
 
-
     admanager = AdManager('act_212526696146973', '212501799482796', resource_path)
 
-    admanager.deleteAllCampaigns()
+    # create the first campaign
+    #admanager.deleteAllCampaigns()
     campaigns = admanager.loadCampaignsFromResources()
-    admanager.createCampaign(campaigns[0])
+    #admanager.createCampaign(campaigns[0])
+
+    # create the adsets
+    # with interests: Sharing, Sharing economy
+    #adsets = admanager.loadAdsetsFromResources()
+    category_names = ["Sharing", "Sharing economy"]
+    targetSearchResults = admanager.searchForTargetingInterests(category_names)
+    for i in range(0, len(category_names)):
+        print("Potential Reach for keyword '" + str(category_names[i]) + "' is: " + str(targetSearchResults[i]['audience_size']))
+    targetingOptions = admanager.createInterestsFromTargetSearchResults(targetSearchResults)
+    print targetingOptions
+    #admanager.createAdSet(adsets[0], campaigns[0].get_id(), targetingOptions)
+
+    # with interests: Flea market
+    #adsets = admanager.loadAdsetsFromResources()
+    category_names = ["Flea market"]
+    targetSearchResults = admanager.searchForTargetingInterests(category_names)
+    for i in range(0, len(category_names)):
+        print("Potential Reach for keyword '" + str(category_names[i]) + "' is: " + str(targetSearchResults[i]['audience_size']))
+    targetingOptions = admanager.createInterestsFromTargetSearchResults(targetSearchResults)
+    print targetingOptions
+    #admanager.createAdSet(adsets[0], campaigns[0].get_id(), targetingOptions)
+
+    # parents with children up to age 18
+    #adsets = admanager.loadAdsetsFromResources()
+    category_names = ["New parents (0-12 months)", "Parents with toddlers (01-02 years)", "Parents with  preschoolers (03-05 years)", "Parents with early school-age children (06-08 years)", "Parents with teenagers (13-18 years)"]
+    targetSearchResults = admanager.searchForOtherTargetingCategories(category_names)
+    for i in range(0, len(category_names)):
+        print("Potential Reach for keyword '" + str(category_names[i]) + "' is: " + str(targetSearchResults[i]['audience_size']))
+    targetingOptions = admanager.createInterestsFromTargetSearchResults(targetSearchResults)
+    print targetingOptions
+    #admanager.createAdSet(adsets[0], campaigns[0].get_id(), targetingOptions)
+
+    #print(targetingOptions)
+
+    # params = {
+    #     'q': 'family_statuses',
+    #     'type': 'adTargetingCategory',
+    # }
+    # response = TargetingSearch.search(params)
+    # print(response)
+
+
+
+
 
 
     # my_account = AdAccount(fbid=my_account_id) # Ad Account 1
@@ -43,15 +81,11 @@ if __name__ == '__main__':
     #     admanager.createCampaign(c)
     #
     #
-    adsets = admanager.loadAdsetsFromResources()
+
     # print "adsets: " + str(adsets)
     #
 
-    targetSearchResults = admanager.searchForTargetingInterests(["Sharing", "Sharing economy"])
-    print(targetSearchResults)
-    interests = admanager.createInterestsFromTargetSearchResults(targetSearchResults)
-    print(interests)
-    admanager.createAdSet(adsets[0], campaigns[0].get_id(), interests)
+
 
 
     # resp2 = admanager.searchForTargetingInterest("Sharing economy")

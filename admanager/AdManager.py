@@ -78,19 +78,33 @@ class AdManager:
         campaign.remote_read(fields=[Campaign.Field.id, Campaign.Field.name])
         return campaign
 
-    def searchForTargetingInterests(self, interest_keywords):
+    def searchForTargetingInterests(self, category_names):
         interests = []
 
-        for interest in interest_keywords:
+        for category_name in category_names:
             params = {
-                'q': interest,
+                'q': category_name,
                 'type': 'adinterest',
             }
             response = TargetingSearch.search(params)
             for result in response:
-                if result['name'] == interest:
+                if result['name'] == category_name:
                     interests.append(result)
         return interests
+
+    def searchForOtherTargetingCategories(self, category_names):
+        categories = []
+
+        for category_name in category_names:
+            params = {
+                'q': category_name,
+                'type': 'adTargetingCategory',
+            }
+            response = TargetingSearch.search(params)
+            for result in response:
+                if result['name'] == category_name:
+                    categories.append(result)
+        return categories
 
     def createInterestsFromTargetSearchResults(self, targetSearchResults):
         interests = []
