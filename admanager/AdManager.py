@@ -40,6 +40,9 @@ class AdManager:
         self.business_id = business_id
         self.pageId = config['page_id']
 
+    def getAccount(self):
+        return AdAccount(fbid=self.account_id)
+
     def listAllCampaigns(self):
         my_account = AdAccount(fbid=self.account_id)
         my_account.remote_read(fields=[Campaign.Field.id, Campaign.Field.name])
@@ -120,7 +123,7 @@ class AdManager:
         adsets = []
         campaigns = self.listAllCampaigns()
         for c in campaigns:
-            adsets.extend(c.get_ad_sets([AdSet.Field.id, AdSet.Field.name]))
+            adsets.extend(c.get_ad_sets([AdSet.Field.id, AdSet.Field.name, AdSet.Field.targeting]))
         return adsets
 
     def readAdSet(adset_id):
@@ -150,6 +153,17 @@ class AdManager:
     def createAdSet(self, adset, campaign_id):
         adset[AdSet.Field.campaign_id] = campaign_id
         adset.remote_create()
+
+    def getPotentialReachForTargeting(self, targeting_spec):
+        my_account = AdAccount(fbid=self.account_id)
+        params = {
+            'targeting_spec' : targeting_spec
+        }
+        reach_estimate = my_account.get_reach_estimate(params=params).get_one() # can there be mutliple reach estimates ??
+        if reach_estimate['estimate_ready']:
+            return reach_estimate['users']
+        else:
+            return None
 
     def listAllAds(self):
         ads = []

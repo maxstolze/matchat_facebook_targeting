@@ -1,3 +1,5 @@
+import time
+
 from admanager.AdManager import *
 
 #import admanager.AdManager
@@ -26,7 +28,9 @@ if __name__ == '__main__':
     image = admanager.createImageFromResources(os.path.join(resource_path, "ads", "images", "matchat_graph_16_9.png"))
     ad = admanager.loadAdFromJson(os.path.join(resource_path, "ads", "ad_matchat.json"))
     admanager.createAd(ad, adset.get_id(), image.get_hash(), "Matchat Sharing Ad")
-    print "created adset with ad: " + adset[AdSet.Field.name] + " => " + ad[Ad.Field.name]
+    reach_estimate = admanager.getPotentialReachForTargeting(adset[AdSet.Field.targeting])
+    print "created adset with ad: " + adset[AdSet.Field.name] + " => " + ad[Ad.Field.name] + " with potential reach of " + str(reach_estimate) + " users"
+    time.sleep(60)
 
     # with interests: Flea market
     adset = admanager.loadAdsetFromJson(os.path.join(resource_path, "adsets", "adset_fleamarket.json"))
@@ -36,7 +40,9 @@ if __name__ == '__main__':
     image = admanager.createImageFromResources(os.path.join(resource_path, "ads", "images", "matchat_graph_16_9.png"))
     ad = admanager.loadAdFromJson(os.path.join(resource_path, "ads", "ad_matchat.json"))
     admanager.createAd(ad, adset.get_id(), image.get_hash(), "Matchat Flea Market Ad")
-    print "created adset with ad: " + adset[AdSet.Field.name] + " => " + ad[Ad.Field.name]
+    reach_estimate = admanager.getPotentialReachForTargeting(adset[AdSet.Field.targeting])
+    print "created adset with ad: " + adset[AdSet.Field.name] + " => " + ad[Ad.Field.name] + " with potential reach of " + str(reach_estimate) + " users"
+    time.sleep(60)
 
     # parents with children up to age 18
     adset = admanager.loadAdsetFromJson(os.path.join(resource_path, "adsets", "adset_parents.json"))
@@ -46,10 +52,10 @@ if __name__ == '__main__':
     image = admanager.createImageFromResources(os.path.join(resource_path, "ads", "images", "matchat_graph_16_9.png"))
     ad = admanager.loadAdFromJson(os.path.join(resource_path, "ads", "ad_matchat.json"))
     admanager.createAd(ad, adset.get_id(), image.get_hash(), "Matchat Parents Ad")
-    print "created adset with ad: " + adset[AdSet.Field.name] + " => " + ad[Ad.Field.name]
+    reach_estimate = admanager.getPotentialReachForTargeting(adset[AdSet.Field.targeting])
+    print "created adset with ad: " + adset[AdSet.Field.name] + " => " + ad[Ad.Field.name] + " with potential reach of " + str(reach_estimate) + " users"
 
     # create the split test
-    # adsets = admanager.listAllAdsets()
     adstudy = admanager.createSplitTestAdStudy("Matchat Split Test", 1532512562, 1532512563, adsets)
     print "created adstudy for split test: " + adstudy[AdStudy.Field.name]
 
