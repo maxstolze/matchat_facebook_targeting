@@ -10,130 +10,46 @@ if __name__ == '__main__':
     admanager = AdManager('act_212526696146973', '212501799482796', resource_path)
 
     # create the first campaign
-    #admanager.deleteAllCampaigns()
+    admanager.deleteAllCampaigns()
     campaigns = admanager.loadCampaignsFromResources()
-    #admanager.createCampaign(campaigns[0])
+    admanager.createCampaign(campaigns[0])
+    print "created campaign: " + campaigns[0][Campaign.Field.name]
 
-    # create the adsets
+    # create the adsets with ads
+    adsets = []
+
     # with interests: Sharing, Sharing economy
-    #adsets = admanager.loadAdsetsFromResources()
-    category_names = ["Sharing", "Sharing economy"]
-    targetSearchResults = admanager.searchForTargetingInterests(category_names)
-    for i in range(0, len(category_names)):
-        print("Potential Reach for keyword '" + str(category_names[i]) + "' is: " + str(targetSearchResults[i]['audience_size']))
-    targetingOptions = admanager.createInterestsFromTargetSearchResults(targetSearchResults)
-    print targetingOptions
-    #admanager.createAdSet(adsets[0], campaigns[0].get_id(), targetingOptions)
+    adset = admanager.loadAdsetFromJson(os.path.join(resource_path, "adsets", "adset_sharing.json"))
+    admanager.createAdSet(adset, campaigns[0].get_id())
+    adsets.append(adset)
+
+    image = admanager.createImageFromResources(os.path.join(resource_path, "ads", "images", "matchat_graph_16_9.png"))
+    ad = admanager.loadAdFromJson(os.path.join(resource_path, "ads", "ad_matchat.json"))
+    admanager.createAd(ad, adset.get_id(), image.get_hash(), "Matchat Sharing Ad")
+    print "created adset with ad: " + adset[AdSet.Field.name] + " => " + ad[Ad.Field.name]
 
     # with interests: Flea market
-    #adsets = admanager.loadAdsetsFromResources()
-    category_names = ["Flea market"]
-    targetSearchResults = admanager.searchForTargetingInterests(category_names)
-    for i in range(0, len(category_names)):
-        print("Potential Reach for keyword '" + str(category_names[i]) + "' is: " + str(targetSearchResults[i]['audience_size']))
-    targetingOptions = admanager.createInterestsFromTargetSearchResults(targetSearchResults)
-    print targetingOptions
-    #admanager.createAdSet(adsets[0], campaigns[0].get_id(), targetingOptions)
+    adset = admanager.loadAdsetFromJson(os.path.join(resource_path, "adsets", "adset_fleamarket.json"))
+    admanager.createAdSet(adset, campaigns[0].get_id())
+    adsets.append(adset)
+
+    image = admanager.createImageFromResources(os.path.join(resource_path, "ads", "images", "matchat_graph_16_9.png"))
+    ad = admanager.loadAdFromJson(os.path.join(resource_path, "ads", "ad_matchat.json"))
+    admanager.createAd(ad, adset.get_id(), image.get_hash(), "Matchat Flea Market Ad")
+    print "created adset with ad: " + adset[AdSet.Field.name] + " => " + ad[Ad.Field.name]
 
     # parents with children up to age 18
-    #adsets = admanager.loadAdsetsFromResources()
-    category_names = ["New parents (0-12 months)", "Parents with toddlers (01-02 years)", "Parents with  preschoolers (03-05 years)", "Parents with early school-age children (06-08 years)", "Parents with teenagers (13-18 years)"]
-    targetSearchResults = admanager.searchForOtherTargetingCategories(category_names)
-    for i in range(0, len(category_names)):
-        print("Potential Reach for keyword '" + str(category_names[i]) + "' is: " + str(targetSearchResults[i]['audience_size']))
-    targetingOptions = admanager.createInterestsFromTargetSearchResults(targetSearchResults)
-    print targetingOptions
-    #admanager.createAdSet(adsets[0], campaigns[0].get_id(), targetingOptions)
+    adset = admanager.loadAdsetFromJson(os.path.join(resource_path, "adsets", "adset_parents.json"))
+    admanager.createAdSet(adset, campaigns[0].get_id())
+    adsets.append(adset)
 
-    #print(targetingOptions)
+    image = admanager.createImageFromResources(os.path.join(resource_path, "ads", "images", "matchat_graph_16_9.png"))
+    ad = admanager.loadAdFromJson(os.path.join(resource_path, "ads", "ad_matchat.json"))
+    admanager.createAd(ad, adset.get_id(), image.get_hash(), "Matchat Parents Ad")
+    print "created adset with ad: " + adset[AdSet.Field.name] + " => " + ad[Ad.Field.name]
 
-    # params = {
-    #     'q': 'family_statuses',
-    #     'type': 'adTargetingCategory',
-    # }
-    # response = TargetingSearch.search(params)
-    # print(response)
+    # create the split test
+    # adsets = admanager.listAllAdsets()
+    adstudy = admanager.createSplitTestAdStudy("Matchat Split Test", 1532512562, 1532512563, adsets)
+    print "created adstudy for split test: " + adstudy[AdStudy.Field.name]
 
-
-
-
-
-
-    # my_account = AdAccount(fbid=my_account_id) # Ad Account 1
-    # my_account.remote_read()
-    # print "account id: " + my_account.get_id_assured()
-
-    # img_path = os.path.join(this_dir, 'resources', 'ads', 'images', 'matchat_graph_16_9.png')
-    # print img_path
-    # hash = admanager.createImageFromResources(img_path)
-    # print hash
-
-    # images = admanager.createAllImagesFromResources()
-    # print images
-
-    # campaigns = admanager.listAllCampaigns()
-    # print "campaigns: " + str(campaigns)
-
-    # campaigns = admanager.readCampaignsFromResources()
-    # print "read campaigns: " + str(campaigns)
-    #
-    # for c in campaigns:
-    #     admanager.createCampaign(c)
-    #
-    #
-
-    # print "adsets: " + str(adsets)
-    #
-
-
-
-
-    # resp2 = admanager.searchForTargetingInterest("Sharing economy")
-    # print("targeting response:" + str(resp2))
-    #
-    # interests = [{
-    #     'id': resp1['id'],
-    #     'name': resp1['name'],
-    # }, {
-    #     'id': resp2['id'],
-    #     'name': resp2['name'],
-    # }]
-    #
-    # admanager.createAdSet(adsets[0], '23842999336300500', interests)
-
-    # campaign = createCampaign(my_account_id)
-    # adset1 = createAdSet(my_account_id, campaign.get_id())
-    # adset2 = createAdSet(my_account_id, campaign.get_id())
-    # createSplitTestAdStudy(my_business_id, adset1.get_id(), adset2.get_id())
-    #createAd(my_account_id, '23842999065780500', '135003680685668')
-    #
-    adsets = admanager.listAllAdsets()
-    print "adsets: " + str(adsets)
-    #
-    # adsets = admanager.listAllAds()
-    # print "ads: " + str(adsets)
-
-
-    # campaigns = admanager.listAllCampaigns()
-    # print "campaigns: " + str(campaigns)
-    #
-    # admanager.deleteAllCampaigns()
-
-    # campaigns = admanager.listAllCampaigns()
-    # print "campaigns: " + str(campaigns)
-
-    # campaign = readCampaign('23842983211330500')
-    # print "campaign: " + campaign[Campaign.Field.name]
-
-    # ads = admanager.loadAdsFromResources()
-    # print "read ads: " + str(ads)
-    #
-    # # admanager.createAd(ads[0], adsets[0].get_id())
-    #
-    # images = admanager.createAllImagesFromResources()
-    # admanager.createAd(ads[0], adsets[0].get_id(), images[0].get_hash())
-    #
-    # ads = admanager.listAllAds()
-    # print "ads: " + str(ads)
-
-    #adstudy = admanager.createSplitTestAdStudy("SplitTest1", 1532512562, 1532512563, adsets)

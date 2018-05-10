@@ -1,0 +1,16 @@
+{
+  "name": "Matchat Parents AdSet",
+  "is_autobid": true,
+  "daily_budget": 500,
+  "billing_event": "LINK_CLICKS",
+  "targeting" : {
+    "geo_locations" : { "countries": ["AT", "DE"] },
+    "family_statuses" : [
+      {"id": "6023005372383", "name": "New parents (0-12 months)"}, 
+      {"id": "6023005458383", "name": "Parents with toddlers (01-02 years)"}, 
+      {"id": "6023005529383", "name": "Parents with  preschoolers (03-05 years)"}, 
+      {"id": "6023005570783", "name": "Parents with early school-age children (06-08 years)"}, 
+      {"id": "6023005681983", "name": "Parents with teenagers (13-18 years)"}
+    ]
+  }
+}

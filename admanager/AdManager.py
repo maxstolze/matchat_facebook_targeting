@@ -147,9 +147,8 @@ class AdManager:
                 adsets.append(adset)
         return adsets
 
-    def createAdSet(self, adset, campaign_id, interests):
+    def createAdSet(self, adset, campaign_id):
         adset[AdSet.Field.campaign_id] = campaign_id
-        adset['targeting']['interests'] = interests
         adset.remote_create()
 
     def listAllAds(self):
@@ -177,10 +176,11 @@ class AdManager:
                 ads.append(adset)
         return ads
 
-    def createAd(self, ad, adset_id, image_hash):
+    def createAd(self, ad, adset_id, image_hash, name=None):
+        if name is not None:
+            ad['name'] = name
         ad[Ad.Field.adset_id] = adset_id
         ad['creative']['object_story_spec']['page_id'] = self.pageId
-        #ad['creative']['image_hash'] = image_hash
         ad['creative']['object_story_spec']['link_data']['image_hash'] = image_hash
         ad.remote_create()
 
@@ -208,8 +208,8 @@ class AdManager:
         adstudy[AdStudy.Field.end_time] = end
         cells = []
         for adset in adsets:
-            name = adset.get_name()  + "_" + str(adset.get_id())
-            cell = {'name' : name, 'adsets' : [adset.get_id()], 'treatment_percentage' : 1 / len(adsets) * 100}
+            name = adset[AdSet.Field.name]  + "_" + str(adset.get_id())
+            cell = {'name' : name, 'adsets' : [adset.get_id()], 'treatment_percentage' : round((1.0 / len(adsets)) * 100, 2)}
             cells.append(cell)
         adstudy[AdStudy.Field.cells] = cells
         adstudy.remote_create()

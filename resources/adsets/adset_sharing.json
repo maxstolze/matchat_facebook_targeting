@@ -1,0 +1,10 @@
+{
+  "name": "Matchat Sharing AdSet",
+  "is_autobid": true,
+  "daily_budget": 500,
+  "billing_event": "LINK_CLICKS",
+  "targeting" : {
+    "geo_locations" : { "countries": ["AT", "DE"] },
+    "interests" : [{"id": "6003382131981", "name": "Sharing"}, {"id": "6003126666749", "name": "Sharing economy"}]
+  }
+}
