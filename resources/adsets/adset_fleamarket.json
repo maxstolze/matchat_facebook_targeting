@@ -5,6 +5,7 @@
   "billing_event": "LINK_CLICKS",
   "targeting" : {
     "geo_locations" : { "countries": ["AT", "DE"] },
+    "targeting_optimization" : "expansion_all",
     "interests" : [{"id": "6002968831292", "name": "Flea market"}]
   }
 }
