@@ -2,7 +2,6 @@ import time
 
 from admanager.AdManager import *
 
-#import admanager.AdManager
 
 if __name__ == '__main__':
 

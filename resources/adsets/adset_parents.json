@@ -1,7 +1,7 @@
 {
   "name": "Matchat Parents AdSet",
-  "is_autobid": true,
   "daily_budget": 500,
+  "bid_amount": 10,
   "billing_event": "LINK_CLICKS",
   "targeting" : {
     "geo_locations" : { "countries": ["AT", "DE"] },

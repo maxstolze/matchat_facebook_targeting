@@ -1,19 +1,12 @@
-from facebookads import FacebookAdsApi
-from facebookads import FacebookSession
-from facebookads.adobjects.adaccount import AdAccount
-from facebookads.adobjects.adaccountuser import AdAccountUser
-from facebookads.adobjects.adstudy import AdStudy
-from facebookads.adobjects.campaign import Campaign
-from facebookads.adobjects.targetingsearch import TargetingSearch
-from facebookads.api import FacebookAdsApi
-from facebookads.adobjects.adset import AdSet
-from facebookads import FacebookAdsApi
-from facebookads.adobjects.targeting import Targeting
-from facebookads import FacebookSession
-from facebookads.adobjects.ad import Ad
-from facebookads.adobjects.adimage import AdImage
-from facebookads.adobjects.adcreative import AdCreative
-from facebookads.specs import ObjectStorySpec, LinkData
+from facebook_business.adobjects.adaccount import AdAccount
+from facebook_business.adobjects.adstudy import AdStudy
+from facebook_business.adobjects.campaign import Campaign
+from facebook_business.adobjects.targetingsearch import TargetingSearch
+from facebook_business.adobjects.adset import AdSet
+from facebook_business import FacebookAdsApi
+from facebook_business import FacebookSession
+from facebook_business.adobjects.ad import Ad
+from facebook_business.adobjects.adimage import AdImage
 
 import json
 import os
