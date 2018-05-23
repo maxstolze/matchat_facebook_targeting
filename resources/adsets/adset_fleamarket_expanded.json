@@ -1,7 +1,7 @@
 {
   "name": "Matchat Flea Market AdSet",
   "daily_budget": 500,
-  "bid_amount": 10,
+  "bid_strategy": "LOWEST_COST_WITHOUT_CAP",
   "billing_event": "LINK_CLICKS",
   "targeting" : {
     "geo_locations" : { "countries": ["AT", "DE"] },
