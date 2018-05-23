@@ -1,3 +1,4 @@
+import datetime
 from facebook_business.adobjects.adaccount import AdAccount
 from facebook_business.adobjects.adstudy import AdStudy
 from facebook_business.adobjects.campaign import Campaign
@@ -13,7 +14,7 @@ import os
 
 class AdManager:
 
-    def __init__(self, account_id, business_id, resource_path):
+    def __init__(self, resource_path):
         config_filename = os.path.join(resource_path, 'config.json')
         config_file = open(config_filename)
         config = json.load(config_file)
@@ -29,8 +30,8 @@ class AdManager:
 
         self.resource_path = resource_path
         self.api = api
-        self.account_id = account_id
-        self.business_id = business_id
+        self.account_id = config['act_id']
+        self.business_id = config['business_id']
         self.pageId = config['page_id']
 
     def getAccount(self):
@@ -209,7 +210,13 @@ class AdManager:
                 images.append(img)
         return images
 
-    def createSplitTestAdStudy(self, name, start, end, adsets):
+    def createSplitTestAdStudy(self, name, start_datetime, end_datetime, adsets):
+
+        # convert datetime start and end date to UNIX millis
+        epoch = datetime.datetime.utcfromtimestamp(0)
+        start = int((start_datetime - epoch).total_seconds())
+        end = int((end_datetime - epoch).total_seconds())
+
         adstudy = AdStudy(parent_id=self.business_id)
         adstudy[AdStudy.Field.name] = name
         adstudy[AdStudy.Field.type] = AdStudy.Type.split_test

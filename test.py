@@ -1,5 +1,7 @@
 import time
 
+import datetime
+
 from admanager.AdManager import *
 
 
@@ -8,7 +10,7 @@ if __name__ == '__main__':
     this_dir = os.path.dirname(__file__)
     resource_path = os.path.join(this_dir, 'resources')
 
-    admanager = AdManager('act_212526696146973', '212501799482796', resource_path)
+    admanager = AdManager(resource_path)
 
     # create the first campaign
     admanager.deleteAllCampaigns()
@@ -54,7 +56,9 @@ if __name__ == '__main__':
     reach_estimate = admanager.getPotentialReachForTargeting(adset[AdSet.Field.targeting])
     print "created adset with ad: " + adset[AdSet.Field.name] + " => " + ad[Ad.Field.name] + " with potential reach of " + str(reach_estimate) + " users"
 
-    # create the split test
-    adstudy = admanager.createSplitTestAdStudy("Matchat Split Test", 1532512562, 1532512563, adsets)
+    # create the split test, start it 5 minutes from now and end it a day later
+    start_time = datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
+    end_time = start_time + datetime.timedelta(hours=24)
+    adstudy = admanager.createSplitTestAdStudy("Matchat Split Test", start_time, end_time, adsets)
     print "created adstudy for split test: " + adstudy[AdStudy.Field.name]
 
