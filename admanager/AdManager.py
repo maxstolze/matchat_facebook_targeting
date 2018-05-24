@@ -12,8 +12,11 @@ from facebook_business.adobjects.adimage import AdImage
 import json
 import os
 
+# class to manage campaigns, adsets, ads
 class AdManager:
 
+    # constructor: read in the config file from the resource folder and
+    # use the parameters to init the facebook ads api
     def __init__(self, resource_path):
         config_filename = os.path.join(resource_path, 'config.json')
         config_file = open(config_filename)
@@ -37,17 +40,20 @@ class AdManager:
     def getAccount(self):
         return AdAccount(fbid=self.account_id)
 
+    # return list of campaigns of the ad account
     def listAllCampaigns(self):
         my_account = AdAccount(fbid=self.account_id)
         my_account.remote_read(fields=[Campaign.Field.id, Campaign.Field.name])
         return my_account.get_campaigns()
 
+    # delete all campaigns of ad account
     def deleteAllCampaigns(self):
         my_account = AdAccount(fbid=self.account_id)
         my_account.remote_read()
         for c in my_account.get_campaigns():
             c.remote_delete()
 
+    # load a campaign from a json file (see resource folder)
     def loadCampaignFromJson(self, jsonFile):
         campaign = Campaign(parent_id = self.account_id)
         config_file = open(jsonFile)
@@ -57,6 +63,7 @@ class AdManager:
             campaign[key] = config[key]
         return campaign
 
+    # load all campaigns from the resource folder
     def loadCampaignsFromResources(self):
         campaigns = []
         campaigns_dir = os.path.join(self.resource_path, "campaigns")
@@ -70,11 +77,14 @@ class AdManager:
     def createCampaign(self, campaign):
         campaign.remote_create()
 
+    # read data from a campaign and return it
     def readCampaign(self, campaign_id):
         campaign = Campaign(fbid=campaign_id)
         campaign.remote_read(fields=[Campaign.Field.id, Campaign.Field.name])
         return campaign
 
+    # search for targeting interests by existing category names
+    # (e.g. use "sharing", "sharing economy" as category names for example)
     def searchForTargetingInterests(self, category_names):
         interests = []
 
@@ -89,30 +99,7 @@ class AdManager:
                     interests.append(result)
         return interests
 
-    def searchForOtherTargetingCategories(self, category_names):
-        categories = []
-
-        for category_name in category_names:
-            params = {
-                'q': category_name,
-                'type': 'adTargetingCategory',
-            }
-            response = TargetingSearch.search(params)
-            for result in response:
-                if result['name'] == category_name:
-                    categories.append(result)
-        return categories
-
-    def createInterestsFromTargetSearchResults(self, targetSearchResults):
-        interests = []
-        for result in targetSearchResults:
-            interest = {
-                'id': result['id'],
-                'name': result['name'],
-            }
-            interests.append(interest)
-        return interests
-
+    # return a list of all adsets in every campaigns of the ad account
     def listAllAdsets(self):
         adsets = []
         campaigns = self.listAllCampaigns()
@@ -120,11 +107,13 @@ class AdManager:
             adsets.extend(c.get_ad_sets([AdSet.Field.id, AdSet.Field.name, AdSet.Field.targeting]))
         return adsets
 
+    # read the data of the adset and return it
     def readAdSet(adset_id):
         ad_set = AdSet(fbid=adset_id)
         ad_set.remote_read(fields=[AdSet.Field.id])
         return ad_set
 
+    # load an adset from a json file (see resource folder)
     def loadAdsetFromJson(self, jsonFile):
         adset = AdSet(parent_id = self.account_id)
         config_file = open(jsonFile)
@@ -134,6 +123,7 @@ class AdManager:
             adset[key] = config[key]
         return adset
 
+    # load all adsets from the resource folder
     def loadAdsetsFromResources(self):
         adsets = []
         adset_dir = os.path.join(self.resource_path, "adsets")
@@ -144,10 +134,12 @@ class AdManager:
                 adsets.append(adset)
         return adsets
 
+    # create an adset for a campaign
     def createAdSet(self, adset, campaign_id):
         adset[AdSet.Field.campaign_id] = campaign_id
         adset.remote_create()
 
+    # return the potential reach estimate for a targeting specification (used in adsets for example)
     # NOTE: you can add the targeting option "targeting_optimization" : "expansion_all" to let facebook expand your
     # audience and reach more users than specified by interests
     def getPotentialReachForTargeting(self, targeting_spec):
@@ -161,6 +153,7 @@ class AdManager:
         else:
             return None
 
+    # return al list of all ads of the ad account
     def listAllAds(self):
         ads = []
         campaigns = self.listAllCampaigns()
@@ -168,6 +161,7 @@ class AdManager:
             ads.extend(c.get_ads([Ad.Field.id, Ad.Field.name]))
         return ads
 
+    # load an ad from a json file specification (see resource folder)
     def loadAdFromJson(self, jsonFile):
         ad = Ad(parent_id = self.account_id)
         config_file = open(jsonFile)
@@ -177,6 +171,7 @@ class AdManager:
             ad[key] = config[key]
         return ad
 
+    # load all ads from the resource folder
     def loadAdsFromResources(self):
         ads = []
         ads_dir = os.path.join(self.resource_path, "ads")
@@ -186,6 +181,8 @@ class AdManager:
                 ads.append(adset)
         return ads
 
+    # create an ad with a image for a specific adset,
+    # the image must be created before to pass the image_hash
     def createAd(self, ad, adset_id, image_hash, name=None):
         if name is not None:
             ad['name'] = name
@@ -194,12 +191,14 @@ class AdManager:
         ad['creative']['object_story_spec']['link_data']['image_hash'] = image_hash
         ad.remote_create()
 
+    # create an image (e.g. for an ad) from a resource (must be certain format, 16:9 and png is working)
     def createImageFromResources(self, image_path):
         img = AdImage(parent_id=self.account_id)
         img[AdImage.Field.filename] = image_path
         img.remote_create()
         return img
 
+    # create all images in the resource folder
     def createAllImagesFromResources(self):
         images = []
         img_dir = os.path.join(self.resource_path, "ads", "images")
@@ -210,6 +209,8 @@ class AdManager:
                 images.append(img)
         return images
 
+    # create a adstudy as a split test with a specific start and end date for a list of adsets
+    # the audience should be divided between the adsets in equal sized parts
     def createSplitTestAdStudy(self, name, start_datetime, end_datetime, adsets):
 
         # convert datetime start and end date to UNIX millis
