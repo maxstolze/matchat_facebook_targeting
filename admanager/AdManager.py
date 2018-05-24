@@ -1,5 +1,6 @@
 import datetime
 from facebook_business.adobjects.adaccount import AdAccount
+from facebook_business.adobjects.adsinsights import AdsInsights
 from facebook_business.adobjects.adstudy import AdStudy
 from facebook_business.adobjects.campaign import Campaign
 from facebook_business.adobjects.targetingsearch import TargetingSearch
@@ -112,6 +113,16 @@ class AdManager:
         ad_set = AdSet(fbid=adset_id)
         ad_set.remote_read(fields=[AdSet.Field.id])
         return ad_set
+
+    # return all fields of a specific adset insights object to analyse the results of an adset
+    all_adsinsights_fields = AdsInsights.Field.__dict__.keys()
+    all_adsinsights_fields.remove('__module__')
+    all_adsinsights_fields.remove('__doc__')
+
+    def readInsightsForAdset(self, adset_id, params = None, fields = all_adsinsights_fields):
+        # query all fields by default
+        ad_set = AdSet(fbid=adset_id)
+        return ad_set.get_insights(fields=fields, params=params)
 
     # load an adset from a json file (see resource folder)
     def loadAdsetFromJson(self, jsonFile):
