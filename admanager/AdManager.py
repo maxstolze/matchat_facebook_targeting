@@ -41,6 +41,9 @@ class AdManager:
     def getAccount(self):
         return AdAccount(fbid=self.account_id)
 
+    def getBusinessId(self):
+        return self.business_id
+
     # return list of campaigns of the ad account
     def listAllCampaigns(self):
         my_account = AdAccount(fbid=self.account_id)
@@ -222,6 +225,11 @@ class AdManager:
 
     # create a adstudy as a split test with a specific start and end date for a list of adsets
     # the audience should be divided between the adsets in equal sized parts
+    # NOTE/TODO/FIXME: this function runs without any error but the split test is not visible
+    # on we admanager but can be read again from the api.
+    # The daily budget can also not be reduced for the involved ads.
+    # So the assumption is that this function for creating a split test doesn't really work.
+    # It also doesnt help to add the 'campaigns" argument to the cells and pass a campaign.
     def createSplitTestAdStudy(self, name, start_datetime, end_datetime, adsets):
 
         # convert datetime start and end date to UNIX millis
